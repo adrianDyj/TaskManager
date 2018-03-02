@@ -25,8 +25,8 @@ public class UserService {
     }
 
     public void addWithDefaultRole(User user) {
-        UserRole defauRole = userRoleRepository.findByRole(DEFAULT_ROLE);
-        user.getRoles().add(defauRole);
+        UserRole defaultRole = userRoleRepository.findByRole(DEFAULT_ROLE);
+        user.getRoles().add(defaultRole);
         userRepository.save(user);
     }
 }
