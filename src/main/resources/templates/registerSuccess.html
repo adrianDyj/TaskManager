@@ -2,10 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Registration Success</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <title>Task Manager | Success</title>
 </head>
 <body>
-<h1>Thanks for registration!</h1>
-<a href="#" th:href="@{/}">Go to homepage</a>
+
+<div role="navigation">
+    <div class="navbar navbar-inverse">
+        <a href="/" class="navbar-brand">Task Manager</a>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="all-tasks">All Tasks</a></li>
+                <li><a href="new-task">New Task</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container"><br/><br/>
+    <div class="col-6 col-md-offset-4">
+        <h1>Thanks for registration!</h1>
+
+        <div class="btn-group" role="group" aria-label="...">
+            <a type="button" class="btn btn-default" th:href="@{/login}">Login</a>
+            <a type="button" class="btn btn-default" th:href="@{/}">Homepage</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

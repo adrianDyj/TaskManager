@@ -1,15 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <title>Please Login</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <title>Task Manager | Login</title>
 </head>
 <body>
-<h1>Please Login</h1>
-<form action="login" th:action="@{/login}" method="post">
-    <input name="username" placeholder="Username" /> <br />
-    <input name="password" placeholder="Password" /> <br />
-    <input type="submit" value="Login" />
-</form>
+
+<div role="navigation">
+    <div class="navbar navbar-inverse">
+        <a href="/" class="navbar-brand">Task Manager</a>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="all-tasks">All Tasks</a></li>
+                <li><a href="new-task">New Task</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container"><br/><br/>
+    <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <h1 class="form-signin-heading">Please Login</h1>
+        <form class="form-signin" action="login" th:action="@{/login}" method="post">
+            <input class="form-control" name="username" type="email" placeholder="Email"/> <br/>
+            <input class="form-control" name="password" type="password" placeholder="Password"/> <br/>
+            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Login"/>
+            <a href="register">Zarejestruj</a>
+        </form>
+    </div>
+</div>
 </body>
 </html>
