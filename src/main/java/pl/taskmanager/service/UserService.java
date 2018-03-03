@@ -1,32 +1,12 @@
 package pl.taskmanager.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import pl.taskmanager.dao.UserRepository;
-import pl.taskmanager.dao.UserRoleRepository;
 import pl.taskmanager.model.User;
-import pl.taskmanager.model.UserRole;
 
-@Service
-public class UserService {
+import java.util.List;
 
-    private static final String DEFAULT_ROLE = "ROLE_USER";
-    private UserRepository userRepository;
-    private UserRoleRepository userRoleRepository;
+public interface UserService {
 
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    void addWithDefaultRole(User user);
 
-    @Autowired
-    public void setUserRoleRepository(UserRoleRepository userRoleRepository) {
-        this.userRoleRepository = userRoleRepository;
-    }
-
-    public void addWithDefaultRole(User user) {
-        UserRole defaultRole = userRoleRepository.findByRole(DEFAULT_ROLE);
-        user.getRoles().add(defaultRole);
-        userRepository.save(user);
-    }
+    List<User> getAll();
 }

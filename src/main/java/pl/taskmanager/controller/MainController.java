@@ -14,53 +14,53 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import pl.taskmanager.model.Task;
-import pl.taskmanager.service.TaskService;
+import pl.taskmanager.service.impl.TaskServiceImpl;
 
 @Controller
 public class MainController {
 
 	@Autowired
-	private TaskService taskService;
+	private TaskServiceImpl taskServiceImpl;
 
 	@GetMapping("/")
-	public String home(HttpServletRequest request){
-		request.setAttribute("mode", "MODE_HOME");
+	public String home(Model model){
+		model.addAttribute("mode", "MODE_HOME");
 		return "index";
 	}
 	
 	@GetMapping("/all-tasks")
-	public String allTasks(HttpServletRequest request){
-		request.setAttribute("tasks", taskService.findAll());
-		request.setAttribute("mode", "MODE_TASKS");
+	public String allTasks(Model model){
+		model.addAttribute("tasks", taskServiceImpl.findAll());
+		model.addAttribute("mode", "MODE_TASKS");
 		return "index";
 	}
 	
 	@GetMapping("/new-task")
-	public String newTask(HttpServletRequest request){
-		request.setAttribute("mode", "MODE_NEW");
+	public String newTask(Model model){
+		model.addAttribute("mode", "MODE_NEW");
 		return "index";
 	}
 	
 	@PostMapping("/save-task")
-	public String saveTask(@ModelAttribute Task task, BindingResult bindingResult, HttpServletRequest request){
+	public String saveTask(@ModelAttribute Task task, BindingResult bindingResult, Model model){
 		task.setDateCreated(new Date());
-		taskService.save(task);
-		request.setAttribute("tasks", taskService.findAll());
-		request.setAttribute("mode", "MODE_TASKS");
+		taskServiceImpl.save(task);
+		model.addAttribute("tasks", taskServiceImpl.findAll());
+		model.addAttribute("mode", "MODE_TASKS");
 		return "index";
 	}
 	
 	@GetMapping("/update-task")
-	public String updateTask(@RequestParam long id, HttpServletRequest request){
-		request.setAttribute("task", taskService.findTask(id));
-		request.setAttribute("mode", "MODE_UPDATE");
+	public String updateTask(@RequestParam long id, Model model){
+		model.addAttribute("task", taskServiceImpl.findTask(id));
+		model.addAttribute("mode", "MODE_UPDATE");
 		return "index";
 	}
 	
 	@GetMapping("/delete-task")
 	public String deleteTask(@RequestParam long id, Model model){
-		taskService.delete(id);
-		model.addAttribute("tasks", taskService.findAll());
+		taskServiceImpl.delete(id);
+		model.addAttribute("tasks", taskServiceImpl.findAll());
 		model.addAttribute("mode", "MODE_TASKS");
 		return "index";
 	}

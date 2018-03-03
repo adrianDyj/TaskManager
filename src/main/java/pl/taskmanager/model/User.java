@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -13,9 +14,9 @@ public class User {
     private Long id;
     private String firstName;
     private String lastName;
-    @NotEmpty
+    @NotEmpty(message = "{pl.taskmanager.model.User.email.NotEmpty}")
     private String email;
-    @NotEmpty
+    @NotEmpty(message = "{pl.taskmanager.model.User.password.NotEmpty}")
     private String password;
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<UserRole> roles = new HashSet<>();
@@ -66,6 +67,20 @@ public class User {
 
     public void setRoles(Set<UserRole> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(email);
     }
 
     @Override

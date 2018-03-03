@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import pl.taskmanager.model.User;
-import pl.taskmanager.service.UserService;
+import pl.taskmanager.service.impl.UserServiceImpl;
 
 import javax.validation.Valid;
 
 @Controller
 public class UserController {
 
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    public void setUserServiceImpl(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     @GetMapping("/register")
@@ -29,12 +29,17 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String addUser(@ModelAttribute @Valid User user, BindingResult bindingResult) {
+    public String addUser(@ModelAttribute @Valid User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors())
             return "registerForm";
         else {
-            userService.addWithDefaultRole(user);
-            return "registerSuccess";
+            if (userServiceImpl.getAll().contains(user)) {
+                model.addAttribute("error", "User with email " + user.getEmail() + " already exists.");
+                return "registerForm";
+            } else {
+                userServiceImpl.addWithDefaultRole(user);
+                return "registerSuccess";
+            }
         }
     }
 }
