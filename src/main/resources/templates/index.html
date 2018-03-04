@@ -1,124 +1,156 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8" />
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
-	<title>Task Manager | Home</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <title>Task Manager | Home</title>
 </head>
 <body>
 
-	<div role="navigation">
-		<div class="navbar navbar-inverse">
-			<a href="/" class="navbar-brand">Task Manager</a>
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li><a href="all-tasks">All Tasks</a></li>
-					<li><a href="new-task">New Task</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	
-	<div class="container" id="homeDiv" th:if="${mode} == 'MODE_HOME'">
-		<div class="jumbotron text-center">
-			<h1>Welcome to Task Manager</h1>
-		</div>
-	</div>
-	
-	<div class="container" id="taskDiv" th:if="${mode} == 'MODE_TASKS'">
-		<h3>My Tasks</h3>
-		<br/>
-		<div class="table-responsive">
-			<table class="table table-striped table-bordered">
-				<thead>
-					<tr>
-						<th>Id</th>
-						<th>Name</th>
-						<th>Description</th>
-						<th>Date Created</th>
-						<th>Finished</th>
-						<th>Edit</th>
-						<th>Delete</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="task: ${tasks}" th:object="${task}">
-						<td th:text="*{id}"></td>
-						<td th:text="*{name}"></td>
-						<td th:text="*{description}"></td>
-						<td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy HH:mm:ss')}"></td>
-						<td th:text="*{finished}"></td>
-						<td><a th:href="'update-task?id=' + ${task.id}" ><span class="glyphicon glyphicon-pencil" ></span></a></td>
-						<td><a th:href="'delete-task?id=' + ${task.id}" ><span class="glyphicon glyphicon-trash" ></span></a></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	
-	<div class="container text-center" th:if="${mode} == 'MODE_UPDATE'">
-		<h3>Manage Task</h3>
-		<hr />
-		<form class="form-horizontal" method="POST" th:action="@{/save-task}" th:object="${task}">
-			<input type="hidden" name="id" th:value="*{id}" />
-			<div class="form-group">
-				<label class="control-label col-md-3">Name</label>
-				<div class="col-md-7">
-					<input type="text" class="form-control" name="name" th:value="*{name}" />
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-md-3">Description</label>
-				<div class="col-md-7">
-					<input type="text" class="form-control" name="description" th:value="*{description}" />
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-md-3">Finished</label>
-				<div class="col-md-7">
-					<input type="radio" class="col-sm-1" name="finished" value="true" />
-					<div class="col-sm-1">Yes</div>
-					<input type="radio" class="col-sm-1" name="finished" value="false" th:checked="checked"/>
-					<div class="col-sm-1">No</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<input type="submit" class="btn btn-primary" value="Save"/>
-			</div>
-		</form>
-	</div>
-	
-	<div class="container text-center" th:if="${mode} == 'MODE_NEW'">
-		<h3>Manage Task</h3>
-		<hr />
-		<form class="form-horizontal" method="POST" th:action="@{/save-task}" th:object="${task}">
-			<input type="hidden" name="id" />
-			<div class="form-group">
-				<label class="control-label col-md-3">Name</label>
-				<div class="col-md-7">
-					<input type="text" class="form-control" name="name" />
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-md-3">Description</label>
-				<div class="col-md-7">
-					<input type="text" class="form-control" name="description" />
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-md-3">Finished</label>
-				<div class="col-md-7">
-					<input type="radio" class="col-sm-1" name="finished" value="true" />
-					<div class="col-sm-1">Yes</div>
-					<input type="radio" class="col-sm-1" name="finished" value="false" th:checked="checked"/>
-					<div class="col-sm-1">No</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<input type="submit" class="btn btn-primary" value="Save"/>
-			</div>
-		</form>
-	</div>
-	
+<div role="navigation">
+    <div class="navbar navbar-inverse">
+        <a href="/" class="navbar-brand">Task Manager</a>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="all-tasks">All Tasks</a></li>
+                <li><a href="new-task">New Task</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="homeDiv" th:if="${mode} == 'MODE_HOME'">
+    <div class="jumbotron text-center">
+        <h1>Welcome to Task Manager</h1>
+    </div>
+</div>
+<div class="container" id="taskDiv" th:if="${mode} == 'MODE_TASKS'">
+    <div class="row">
+
+        <div class="col-md-4">
+            <h3>To Do</h3>
+            <br/>
+            <div th:each="task: ${tasks}" th:object="${task}">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h5 th:text="*{name}">Special title treatment</h5>
+                    </div>
+                    <div class="panel-body">
+                        <h6 th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy HH:mm:ss')}"></h6>
+                        <p th:text="*{description}">With supporting text below as a natural lead-in to
+                            additional content.</p>
+                        <a th:href="'update-task?id=' + ${task.id}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a th:href="'delete-task?id=' + ${task.id}"><span class="glyphicon glyphicon-trash"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <h3>In Progress</h3>
+            <br/>
+            <div th:each="task: ${tasks}" th:object="${task}">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h5 th:text="*{name}">Special title treatment</h5>
+                    </div>
+                    <div class="panel-body">
+                        <h6 th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy HH:mm:ss')}"></h6>
+                        <p th:text="*{description}">With supporting text below as a natural lead-in to
+                            additional content.</p>
+                        <a th:href="'update-task?id=' + ${task.id}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a th:href="'delete-task?id=' + ${task.id}"><span class="glyphicon glyphicon-trash"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <h3>Done</h3>
+            <br/>
+            <div th:each="task: ${tasks}" th:object="${task}">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h5 th:text="*{name}">Special title treatment</h5>
+                    </div>
+                    <div class="panel-body">
+                        <h6 th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy HH:mm:ss')}"></h6>
+                        <p th:text="*{description}">With supporting text below as a natural lead-in to
+                            additional content.</p>
+                        <a th:href="'update-task?id=' + ${task.id}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a th:href="'delete-task?id=' + ${task.id}"><span class="glyphicon glyphicon-trash"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="container text-center" th:if="${mode} == 'MODE_UPDATE'">
+    <h3>Manage Task</h3>
+    <hr/>
+    <form class="form-horizontal" method="POST" th:action="@{/save-task}" th:object="${task}">
+        <input type="hidden" name="id" th:value="*{id}"/>
+        <div class="form-group">
+            <label class="control-label col-md-3">Name</label>
+            <div class="col-md-7">
+                <input type="text" class="form-control" name="name" th:value="*{name}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3">Description</label>
+            <div class="col-md-7">
+                <input type="text" class="form-control" name="description" th:value="*{description}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3">Finished</label>
+            <div class="col-md-7">
+                <input type="radio" class="col-sm-1" name="finished" value="true"/>
+                <div class="col-sm-1">Yes</div>
+                <input type="radio" class="col-sm-1" name="finished" value="false" th:checked="checked"/>
+                <div class="col-sm-1">No</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Save"/>
+        </div>
+    </form>
+</div>
+
+<div class="container text-center" th:if="${mode} == 'MODE_NEW'">
+    <h3>Manage Task</h3>
+    <hr/>
+    <form class="form-horizontal" method="POST" th:action="@{/save-task}" th:object="${task}">
+        <input type="hidden" name="id"/>
+        <div class="form-group">
+            <label class="control-label col-md-3">Name</label>
+            <div class="col-md-7">
+                <input type="text" class="form-control" name="name"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3">Description</label>
+            <div class="col-md-7">
+                <input type="text" class="form-control" name="description"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3">Finished</label>
+            <div class="col-md-7">
+                <input type="radio" class="col-sm-1" name="finished" value="true"/>
+                <div class="col-sm-1">Yes</div>
+                <input type="radio" class="col-sm-1" name="finished" value="false" th:checked="checked"/>
+                <div class="col-sm-1">No</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Save"/>
+        </div>
+    </form>
+</div>
+
 </body>
 </html>
